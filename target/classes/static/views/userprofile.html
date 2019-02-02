@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title></title>
+<style type="text/css">
+.panel-primary>.panel-heading {
+    color: #fff;
+    background-color: #2c3742;
+    border-color: #2c3742;
+}
+</style>
+</head>
+<body>
+<div class="row" style="align-content: center;">
+<div class="panel panel-primary col-lg-6">
+      <div class="panel-heading">Your Profile</div>
+      <div class="panel-body">
+        <div class="form-group">
+ <form class="needs-validation" novalidate ng-submit="updateuser()">
+  <div class="form-row">
+    <div class="col-md-4  md-form">
+    
+      <label for="validationCustom012">Full Name</label>
+      <input type="text"  class="form-control" ng-model="user.name" id="validationCustom012" placeholder="" 
+        required>
+      <br>
+      <label for="validationCustom012">Email</label>
+      <input type="text"  class="form-control" ng-model="user.email" id="validationCustom012" placeholder="" 
+        required>
+        <br>
+        
+      <label for="validationCustom012">Role</label>
+      <input type="text"  class="form-control" ng-model="user.role" id="validationCustom012" placeholder="" disabled="disabled"
+        required>
+      <br>
+      <label for="validationCustom012">Password</label>
+      <input type="text"  class="form-control" ng-model="user.credential.password" id="validationCustom012" placeholder="" 
+        required><br>
+        
+     <input type="submit"  class="btn btn-warning" value="Update Profile"><br>
+    </div>
+  
+   
+ </div>
+ 
+   
+</form>
+      
+      
+      
+      </div>
+    </div>
+    </div>
+  
+    </div>
+</body>
+</html>

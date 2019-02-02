@@ -1,0 +1,19 @@
+
+<div class="login">
+  <div class="login-triangle"></div>
+  
+  <h2 class="login-header">Log in</h2>
+{{msg}}
+  <form class="login-container" ng-submit="checkuser()">
+    <p><input type="email" placeholder="Email" ng-model="username"></p>
+    <p><input type="password" placeholder="Password" ng-model="password"></p>
+    <p><input type="submit" value="Log in"></p>
+    
+    <p><button class="primary" ng-click="signup()">New Here </button>
+  </form>
+  
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style type="text/css">
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: url('../halftone.png');
+}
+
+form {
+  max-width: 300px;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #f4f7f8;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
+textarea,
+select {
+  background: rgba(255,255,255,.1);
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+          box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+  margin-bottom: 30px;
+  -webkit-transition: .4s;
+          transition: .4s;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  border-top: 2px solid #d2d9dd;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus {
+  background: #d2d9dd;
+  border-radius: 30px;
+  border-top: none;
+}
+
+textarea:focus {
+  background: #d2d9dd;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 0 4px 8px 0;
+}
+
+select {
+  padding: 6px;
+  height: 32px;
+  border-radius: 2px;
+}
+
+button {
+  position: relative;
+  display: block;
+  padding: 19px 39px 18px 39px;
+  color: #FFF;
+  margin: 0 auto;
+  background: #2c3742;
+  font-size: 18px;
+  text-align: center;
+  font-style: normal;
+  width: 100%;
+  border: 1px solid #2c3742;
+  border-width: 1px 1px 3px;
+  margin-bottom: 10px;
+  transition: .4s;
+}
+
+button:hover {
+  color: #9b59b6;
+  width: 70%;
+  border-radius: 30px;
+  background: transparent;
+  border-width: 2px 2px 3px;
+  border-color: #9b59b6;
+}
+@media print {
+   .no-print{
+        display:none;
+    }
+}
+fieldset {
+  margin-bottom: 30px;
+  border: none;
+}
+
+legend {
+  font-size: 1.4em;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+label.light {
+  font-weight: 300;
+  display: inline;
+}
+
+.number {
+  background: #2c3742;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  border-radius: 8px 5px 8px 20px;
+}
+
+
+@media screen and (min-width: 480px) {form {max-width: 480px}}
+@media screen and (min-width: 1024px) {
+  form {max-width: 960px}
+  fieldset {
+    position: relative;
+    float: left;
+    width: 45%;
+  }
+
+  fieldset.profile {
+    width: 54%;
+    float: right;
+  }
+}
+</style>
+</head>
+<body >
+<div id="printable">
+<div class="container" >
+
+			<form  method="post">
+        
+        <h2>Details Of The Meet</h2>
+        <div class="row">
+        <fieldset>
+          
+          <legend><span class="number">1</span><h4>Basic Info</h4></legend>
+          <h4>Meeting Title</h4>
+          <input type="text" id="name" name="user_name" placeholder="{{meettodisplay.title}}" disabled="disabled" ng-model="meettodisplay.title">
+          <h4>Meeting Venue</h4>
+          <input type="email" id="mail" name="user_email" placeholder="{{meettodisplay.venue}}" ng-model="meettodisplay.venue" disabled="disabled">
+          <h4>Conducted By</h4>
+          <input type="text" id="password" name="user_password" ng-model="meettodisplay.user.credential.username"placeholder="{{meettodisplay.user.credential.username}}" disabled="disabled">
+          
+           <legend><span class="number">2</span><h4>Tasks Of The Above Meet(Type into the area to update)</h4></legend>
+         
+        </fieldset>
+        </div>
+        <div class="row" >
+        
+        <div class="col-sm-4" ng-repeat="task in meettodisplay.tasks" >
+        
+          <input type="text" id="name" name="user_name" placeholder="{{task.details}}"  data-ng-model="task.details">
+    <button class="btn btn-warning" ng-click="updatetask(task)">Update Task</button><br><br><button class="btn btn-danger" ng-click="deletetask(task.id)">Delete Task</button>
+ <hr>
+    </div>
+    
+        </div>
+        
+        </form>
+    </div>    
+    
+ </div>	
+ 
+   
+  
+        	
+        <button type="submit" ng-click="printDiv('printable')">Print</button>	
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="col-md-10" >
+		  	<div class="row">
+		  		<div class="col-md-6">
+		  			<div class="content-box-large" id="allmeets" style="display: block;" ng-if='allmeetsdiv'>
+		  				<div class="panel-heading">
+							<div class="panel-title"><b>All The Meets In A Flash</b></div>
+							
+							<div class="panel-options">
+								<a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+								<a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+							</div>
+						</div>
+		  				<div class="panel-body" >
+		  				<input type="text" class="input-sm" placeholder="Search Meet" ng-model="search">
+		  				<hr>
+		  					<div ng-repeat="m in meeting ">
+		  					<a href="#!/meetinfo/{{m.id}}">
+		  					<h4>Meeting Title:{{m.title}}</h4>
+		  					<h5>Meeting Venue:{{m.venue}}</h5>
+		  					</a>
+		  					<button ng-click="deletemeet(m.id)" class="btn btn-danger">Delete Meet</button>&nbsp<button ng-click="updatemeet(m)" class="btn btn-warning">Update Meet</button>&nbsp<button ng-click="addtask(m)" class="btn btn-info">Add task to the Meet</button>
+		  					<HR>
+		  					</div>
+		  				</div>
+		  			</div>
+		  			<div class="content-box-large" id="allmeets" style="display: block;" ng-if='updatediv'>
+		  				<div class="panel-heading">
+							<div class="panel-title"><h4>Update The Meet</h4></div>
+							
+							
+						</div>
+		  				<div class="panel-body" >
+		  				<hr>
+		  					<div>
+		  					    <form class="needs-validation" novalidate ng-submit="confirmupdate(nm)">
+  <div class="form-row">
+    <div class="col-md-4  md-form">
+    
+      <label for="validationCustom012"><h4>Meeting Title:</h4></label>
+<input type="text" placeholder="Enter the New Meeting Title" class="input-lg" ng-model="nm.title"> 
+
+ <br>
+       <label for="validationCustom012"><h4>Meeting Venue:</h4></label>
+<input type="text" placeholder="Enter the New Meeting Venue" class="input-lg" ng-model="nm.venue">
+<br>
+<br>
+     <input type="submit"  class="btn btn-danger " value="Confirm Update"><br>
+    </div>
+   
+ </div>
+ 
+   
+</form>
+		  					<HR>
+		  					</div>
+		  				</div>
+		  			</div>
+		  		</div>
+		  		<div class="col-md-6" ng-if='showcreatemeet'>
+		  			<div class="content-box-large">
+		  				<div class="panel-heading">
+							<div class="panel-title"><b>Type Below To Create A Meet</b></div>
+							</div>
+		  				<div class="panel-body">
+		  				<hr>
+		  					 <div class="form-group">
+ <form class="needs-validation" novalidate ng-submit="addmeet()">
+  <div class="form-row">
+    <div class="col-md-4  md-form">
+    
+      <label for="validationCustom012"><h4>Meeting Title:</h4></label>
+<input type="text" placeholder="Enter the Meeting Title" class="input-lg" data-ng-model="m.title"> 
+
+ <br>
+       <label for="validationCustom012"><h4>Meeting Venue:</h4></label>
+<input type="text" placeholder="Enter the Meeting Venue" class="input-lg" data-ng-model="m.venue">
+<br>
+<br>
+     <input type="submit"  id="meetcreate" style="display: block;" class="btn btn-success " value="Create Meeting">
+     <input type="button" id="aftercreate" style="display:none;" class="btn btn-info" value="Meet Created" disabled="disabled"><br>
+         <input type="button" id="link" ng-click="changeit()" style="display:none;" class="btn btn-primary" value="Create Antoher Meet">
+     
+     <br>
+    </div>
+   
+ </div>
+ 
+   
+</form>
+</div>
+		  					</div>
+		  				</div>
+		  			</div>
+		  			<div class="col-md-6" ng-if='showaddtask'>
+		  			<div class="content-box-large">
+		  				<div class="panel-heading">
+							<div class="panel-title"><b>Add Task To The Below Meet</b></div>
+							</div>
+		  				<div class="panel-body">
+		  				  <h5>Meeting Title:{{ameet.title}}</h5>
+		  				  <h5>Meeting Venue:{{ameet.venue}}</h5>
+		  				  
+    
+		  				<hr>
+		  					 <div class="form-group">
+ <form class="needs-validation" novalidate ng-submit="posttask(task,ameet)">
+  <div class="form-row">
+    <div class="col-md-4  md-form">
+  
+    
+      <label for="validationCustom012"><h4>Note Down The Tasks Below:</h4></label>
+<textarea rows="5" cols="50" id="ta" name="styled-textarea" id="styled" ng-model="task.details" placeholder="Enter your Task Here.."></textarea> 
+<br>
+<br>
+     <input type="submit"  class="btn btn-primary " id="addtask" value="Add Task" style="display: block;">
+     <input type="button"  class="btn btn-success " id="addedtask" value="Task to {{ameet.title}} added successfully" style="display: none;" disabled="disabled">
+ <br>
+     <input type="button" class="btn btn-warning " id="addothertask"  ng-click="addnewtask(ameet)" value="Add Another Task" style="display: none;">
+     <br>
+     <input type="button" class="btn btn-info " id="home"  ng-click="gohome()" value="Go Back" style="display: none;">
+    </div>
+   
+ </div>
+ 
+   
+</form>
+</div>
+		  					</div>
+		  				</div>
+		  			</div>
+		  		</div>
+</div>
+</div>
+
+</body>
+</html>
