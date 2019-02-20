@@ -5,13 +5,9 @@ App
 				[ '$stateProvider', '$urlRouterProvider',
 						function($stateProvider, $urlRouterProvider) {
 					 
-					$urlRouterProvider.otherwise("/login")
+					$urlRouterProvider.otherwise("/dashboard")
 					 
-							$stateProvider.state('login', { // state for login
-								url : "/login",
-								templateUrl : "views/login.html",
-								controller : "LoginController"
-							}).state('dashboard', { // state for dashboard
+							$stateProvider.state('dashboard', { // state for dashboard
 								url : "/dashboard",
 								templateUrl : "views/dashboard.html",
 								controller : "DashboardController"
@@ -19,10 +15,6 @@ App
 								url : "/meetinfo/:id",
 								templateUrl : "views/meetinfo.html",
 								controller : "meetinfocontroller"
-							}).state('signup', { // state for signup
-								url : "/signup",
-								templateUrl : "views/signup.html",
-								controller : "signcontroller"
 							}).state('allusers', { // state for login
 								url : "/allusers",
 								templateUrl : "views/allusers.html",
@@ -39,114 +31,33 @@ App
 
 						} ])
 		.controller(
-				"signcontroller",
-				function($window, $rootScope, $scope, $location, $http) {
-					
-					$scope.addnewuser = function() {
-						$http({
-
-							method : "POST",
-							url : "http://localhost:1234/rest/user",
-							data : angular.toJson($scope.newuser),
-							headers : {
-								'Content-Type' : 'application/json'
-							}
-						}).then(_success1, _error1);
-						function _success1(response) {
-							$scope.newuser = response.data;
-							$scope.addcredential($scope.newuser.id);
-
-						}
-
-						function _error1(response) {
-							// document.getElementById("business-button-fail").style.display="block";
-							// document.getElementById("business-button-sending").style.display="none";
-							alert("somethng went wrong");
-						}
-
-					}, $rootScope.changeit = function() {
-						alert("");
-					}
-
-							$scope.addcredential = function(uid) {
-
-								$http(
-										{
-
-											method : "POST",
-											url : "http://localhost:1234/rest/addcreden/"
-													+ uid,
-											data : angular
-													.toJson($scope.credential),
-											headers : {
-												'Content-Type' : 'application/json'
-											}
-										}).then(_success1, _error1);
-								function _success1(response) {
-									alert("Sign Up Successfull.Please Login To Continue");
-									$location.url("/login");
-
-								}
-
-								function _error1(response) {
-									// document.getElementById("business-button-fail").style.display="block";
-									// document.getElementById("business-button-sending").style.display="none";
-									alert("somethng went wrong");
-								}
-
-							}, $scope.login = function() {
-								$location.url("/login");
-
-							}
-
-				})
-		.controller(
-				"LoginController",
-				function($window, $rootScope, $scope,$location,$http) {
-					
-					$rootScope.display = "true",
-
-					$scope.signup = function() {
-						$location.url("/signup");
-
-					},
-
-					$scope.checkuser = function() {
-
-						$http({
-							method : "GET",
-							url : "http://localhost:1234/rest/login",
-							headers : {
-								"username" : $scope.username,
-								"password" : $scope.password
-							}
-						}).then(_success, _error);
-
-						function _success(response) {
-							$rootScope.user = response.data;
-							alert("Login Successfull");
-							console.log($rootScope.user);
-							$window.localStorage.setItem("user", angular
-									.toJson($scope.user));
-
-							$window.location.href = "#!/dashboard";
-
-						}
-						function _error(response) {
-							// console.log($scope.user);
-							$scope.msg = "Invalid Username/Password";
-						}
-
-					}
-				})
-		.controller(
 				"DashboardController",
 				function($scope, $window, $rootScope, $http,$location) {
 					alert("home");
 					document.getElementById("one").style.display = "block";
-							$scope.m = {};
-					$rootScope.user = JSON.parse($window.localStorage
-							.getItem("user"));
+					$scope.m = {};
+							$http({
+								method : "GET",
+								url : "http://localhost:1234/rest/getlogedin",
+								headers : {
+									'Content-Type' : 'application/json'
+								}
+
+							}).then(_success1, _error1);
+
+					function _success1(response) {
+						$rootScope.user=response.data;
+						if(localStorage.getItem("user")==null){
+						$window.localStorage.setItem("user", angular.toJson($scope.user));
+						}
+						
+						
+					}
+					function _error1(response) {
+						
+						$scope.msg = "";
+					}
+					
 							$rootScope.allmeetsdiv = true;
 							$rootScope.updatediv = false;
 							$rootScope.showcreatemeet = true;
@@ -170,23 +81,23 @@ App
 						
 						$scope.msg = "Unable to load Meetings Data";
 					}
-					;
+					
 					
 
 							$scope.addmeet = function() {
-
+                                 
 								$http(
 										{
 
 											method : "POST",
 											url : "http://localhost:1234/rest/meeting/"
-													+ $scope.user.id,
+													+ $rootScope.user.id,
 											data : angular.toJson($scope.m),
 											headers : {
 												'Content-Type' : 'application/json'
 											}
-										}).then(_success1, _error1);
-								function _success1(response) {
+										}).then(_success2, _error2);
+								function _success2(response) {
 									$scope.newmeet = response.data;
 									$scope.meeting.push($scope.newmeet);
 									document.getElementById("meetcreate").style.display="none";
@@ -195,12 +106,11 @@ App
 									$scope.m={};
 								}
 
-								function _error1(response) {
+								function _error2(response) {
 									// document.getElementById("business-button-fail").style.display="block";
 									// document.getElementById("business-button-sending").style.display="none";
 									alert("somethng went wrong");
 								}
-
 							},
 							
 							$scope.changeit=function(){
@@ -251,31 +161,28 @@ App
 							$scope.confirmupdate = function(newmeet) {
 								var value = confirm("Are you sure you want to update this meet");
 								$scope.upmeet = newmeet;
+								alert($scope.upmeet);
 								if (value) {
 									$http(
 											{
 
-												method : "PUT",
-												url : "http://localhost:1234/rest/meeting/"
-														+ $scope.upmeet.id,
-												data : angular
-														.toJson($scope.upmeet),
+												method : "POST",
+												url : "http://localhost:1234/rest/meeting/"+$scope.upmeet.id,
+													
+												data : angular.toJson($scope.upmeet),
 												headers : {
 													'Content-Type' : 'application/json'
 												}
-											}).then(_success1, _error1);
-									function _success1(response) {
-										$scope.allmeetsdiv = true;
-										$scope.updatediv = false;
-										alert("Update Successfull");
-
+											}).then(_success2, _error2);
+									function _success2(response) {
+										alert("meeting updated successfully");
 									}
 
-									function _error1(response) {
-										// document.getElementById("business-button-fail").style.display="block";
-										// document.getElementById("business-button-sending").style.display="none";
+									function _error2(response) {
+										
 										alert("somethng went wrong");
 									}
+									
 								}
 
 							},
@@ -386,9 +293,9 @@ $rootScope.logout=function(){
 				function($stateParams, $window, $rootScope, $scope, $location,
 						$http) {
 					document.getElementById("one").style.display = "block";
-					$rootScope.user = JSON.parse($window.localStorage
-							.getItem("user"));
+					$rootScope.user=JSON.parse( localStorage.getItem("user"));
 					$scope.mid = $stateParams.id;
+					
 					$rootScope.logout=function(){
 						
 						alert("Logout Successfull");
@@ -496,9 +403,29 @@ $rootScope.logout=function(){
 
 				}).controller("AllUserController",
 				function($window, $rootScope, $scope, $location, $http) {
-					document.getElementById("one").style.display = "block",
-					$rootScope.user = JSON.parse($window.localStorage
-							.getItem("user")),
+					document.getElementById("one").style.display = "block";
+					$rootScope.user=JSON.parse( localStorage.getItem("user"));
+					$http({
+						method : "GET",
+						url : "http://localhost:1234/rest/getlogedin",
+						headers : {
+							'Content-Type' : 'application/json'
+						}
+
+					}).then(_success1, _error1);
+
+			function _success1(response) {
+				$rootScope.user=response.data;
+				$window.localStorage.setItem("user", angular
+						.toJson($scope.user));
+				
+				
+				
+			}
+			function _error1(response) {
+				
+				$scope.msg = "";
+			}
 				    $scope.itsu=function(name){
 						if(name==$rootScope.user.name){
 							return true;
@@ -514,7 +441,7 @@ $rootScope.logout=function(){
 						$window.location.reload();
 						$location.url("/login");
 					}
-					,
+					
 					$http({
 
 						method : "GET",
@@ -542,9 +469,9 @@ $rootScope.logout=function(){
 						"userprofilecontroller",
 						function($window, $rootScope, $scope, $location, $http) {
 							document.getElementById("one").style.display = "block";
-							$scope.user = JSON.parse($window.localStorage
-									.getItem("user"))		;
+							$rootScope.user=JSON.parse( localStorage.getItem("user"));
 	
+						
 							$rootScope.logout=function(){
 								
 								alert("Logout Successfull");
@@ -555,33 +482,33 @@ $rootScope.logout=function(){
 							}
 									
 								$scope.updateuser=function(){
-								
+									
 								
 								$http({
 
 										method : "PUT",
 
-										url : "http://localhost:1234/rest/user/"+$scope.user.id,
-										data : angular
-										.toJson($scope.user),
+										url : "http://localhost:1234/rest/user/"+$rootScope.user.id,
+										data : angular.toJson($rootScope.user),
 								headers : {
 									'Content-Type' : 'application/json'
 								}
 
-									}).then(_success, _error);
+									}).then(_success3, _error3);
 
-									function _success(response) {
+									function _success3(response) {
 
 										alert("update successfully");
-										$scope.user = response.data;
+										$rootScope.user = response.data;
+										
 										$window.localStorage.setItem("user", angular
-												.toJson($scope.user));
+												.toJson($rootScope.user));
 											
 									}
 
-									function _error(response) {
-
-											
+									function _error3(response) {
+										alert("oops");
+										
 										$scope.error_msg = "Problem in loading data. please check your internet connection";
 
 									}
@@ -594,8 +521,7 @@ $rootScope.logout=function(){
 								function($window, $rootScope, $scope, $location, $http) {
 									alert("im here");
 									document.getElementById("one").style.display = "block";
-									$rootScope.user = JSON.parse($window.localStorage
-											.getItem("user"))	;
+									$rootScope.user=JSON.parse( localStorage.getItem("user"));
 								$scope.loader=function(){
 									document.getElementById("sender").style.display = "none";
 									document.getElementById("loader").style.display = "block";
@@ -608,8 +534,7 @@ $rootScope.logout=function(){
 
 												method : "POST",
 												url : "http://localhost:1234/rest/sendmail",
-												data : angular
-												.toJson($rootScope.user),	
+												data : angular.toJson($rootScope.user),	
 
 												headers : {
 													'Content-Type' : 'application/json',

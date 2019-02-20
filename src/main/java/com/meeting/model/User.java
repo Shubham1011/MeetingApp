@@ -1,8 +1,13 @@
 package com.meeting.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,10 +15,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import io.swagger.annotations.ApiModelProperty;
 
 @Entity
 public class User {
+	
+	 
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,7 +45,12 @@ public class User {
 	
 
 	
-	@OneToOne
+	
+
+
+
+
+	@OneToOne(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
 	private Credential credential;
 	
 	public Credential getCredential() {
@@ -76,6 +92,8 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	
 	
 	
 }

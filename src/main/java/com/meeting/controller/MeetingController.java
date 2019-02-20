@@ -18,7 +18,7 @@ import com.meeting.model.User;
 import com.meeting.repository.MeetingRepository;
 import com.meeting.repository.UserRepository;
 
-@CrossOrigin("*")
+
 @RestController
 @RequestMapping("rest")
 public class MeetingController {
@@ -27,7 +27,6 @@ public class MeetingController {
 
 	@Autowired
 	MeetingRepository meetingRepository;
-	@CrossOrigin(origins = {"http://localhost:8080"})
 	@PostMapping("/assigntasktomeeting/{mid}/{tid}")
 	public void assign(@PathVariable("mid") int mid,@PathVariable("tid") int tid)
 	{

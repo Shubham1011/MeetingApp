@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.meeting.model.Task;
 import com.meeting.repository.TaskRepository;
-@CrossOrigin
+
 @RestController
 @RequestMapping("rest")
+
 public class TaskController {
 @Autowired
 TaskRepository taskrepository;
-@CrossOrigin(origins = {"http://localhost:8080"})
+
 @PostMapping("/addtask")
 public Task addtask(@RequestBody Task t)
 {
@@ -29,7 +30,7 @@ public Task addtask(@RequestBody Task t)
 	
 	}
 
-@CrossOrigin(origins = {"http://localhost:8080"})
+
 @PutMapping("/updatetask/{tid}")
 public Task uptask(@PathVariable("tid") int tid,@RequestBody Task t)
 {

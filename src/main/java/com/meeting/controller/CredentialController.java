@@ -25,7 +25,7 @@ public class CredentialController {
 	@Autowired
 	private UserRepository userRepository;
 	@GetMapping("/login")
-	@CrossOrigin(origins = {"http://localhost:8080"})
+
 	public User login(@RequestHeader("username") String username,
 			@RequestHeader("password") String password){
 		User u = userRepository.findByEmail(username);
@@ -39,7 +39,7 @@ public class CredentialController {
 		
 	}
 
-	@CrossOrigin(origins = {"http://localhost:8080"})
+	
 	@PutMapping("/upcred/{cid}")
 	public Credential upcred(@PathVariable("cid") int cid,@RequestHeader("email") String email) {
 		 Credential nc=credentialsRepository.getOne(cid);

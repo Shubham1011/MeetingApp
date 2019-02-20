@@ -26,6 +26,8 @@ public class Meeting {
 	private User user;
 	
 	
+	
+
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="meeting_task",joinColumns=@JoinColumn(referencedColumnName="id"),
 	inverseJoinColumns=@JoinColumn(referencedColumnName="id"))

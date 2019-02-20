@@ -1,5 +1,6 @@
 	package com.meeting.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,6 +36,8 @@ import com.meeting.service.MailService;
 @RequestMapping("rest")
 public class UserController {
 	@Autowired
+	PasswordEncoder ps;
+	@Autowired
 	UserRepository userRepository;
 	@Autowired
 	private MailService mailservice;
@@ -47,19 +51,23 @@ public class UserController {
 	
 	
 	
-	@CrossOrigin(origins = {"http://localhost:8080"})
+	
 	@PostMapping("/user")
 	public User createUser(@RequestBody User user) {
-		//go to repo(User) and use save method to insert in DB
+		user.setRole("USER");
 		return userRepository.save(user);
+	}
+	
+	@GetMapping("/getlogedin")
+	public User	 getloggedin(Principal user) {
+		User u=userRepository.findByEmail(user.getName());
+		return u;
 	}
 	
 	
 	
 	@PostMapping("/sendmail")
-	public void sendmail(
-			@RequestBody User u,
-			@RequestHeader("fromAddress") String fromAddress,
+	public void sendmail(@RequestHeader("fromAddress") String fromAddress,
 			@RequestHeader("subject") String subject,
 			@RequestHeader("content") String content) {
 		
@@ -72,16 +80,19 @@ public class UserController {
 	}
 		
 
-	@CrossOrigin(origins = {"http://localhost:8080"})
+	
 	@PostMapping("/addcreden/{id}")
 	public void addcreden(@PathVariable("id") int id,@RequestBody Credential c)
 	{
-		User u=userRepository.getOne(id);
-		c.setUsername(u.getEmail());
-		u.setCredential(c);
+		User nu=userRepository.getOne(id);
+		c.setPassword(ps.encode(c.getPassword()));
+		c.setUsername(nu.getEmail());
+		
+		
+		nu.setCredential(c);
 		
 		credentialrepository.save(c);
-		userRepository.save(u);
+		userRepository.save(nu);
 		
 	}
 	
@@ -107,7 +118,7 @@ public class UserController {
 		return false;
 	}
 	
-	@CrossOrigin(origins = {"http://localhost:8080"})
+	
 	@GetMapping("/users")
 	public List<User> getUsers() {
 		//go to repo and fetch all users 
@@ -118,14 +129,14 @@ public class UserController {
 		//go to repo and fetch user based on id.
 		return userRepository.getOne(id);
 	}
-	@CrossOrigin(origins = {"http://localhost:8080"})
+	
 	@PutMapping("/user/{id}")
 	public User updateUser(@RequestBody User user,@PathVariable("id") int id) {
 		//go to repo and fetch existing user based on id
 		User u = userRepository.getOne(id);//existing User
 		Credential c=credentialrepository.getOne(u.getCredential().getId());
 		c.setUsername(user.getEmail());
-		c.setPassword(user.getCredential().getPassword());
+		c.setPassword(ps.encode(user.getCredential().getPassword()));
 		u.setName(user.getName());
 		u.setEmail(user.getEmail());
 		credentialrepository.save(c);
