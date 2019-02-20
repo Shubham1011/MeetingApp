@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,6 +37,7 @@ import com.meeting.service.MailService;
 @RequestMapping("rest")
 public class UserController {
 	@Autowired
+	@Lazy
 	PasswordEncoder ps;
 	@Autowired
 	UserRepository userRepository;
